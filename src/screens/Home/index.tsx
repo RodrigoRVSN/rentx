@@ -23,7 +23,6 @@ export const Home = () => {
     async function loadCars() {
       try {
         const response = await api.get("/cars");
-        console.log(response);
         setCarData(response.data);
       } catch (error) {
         console.log(error);

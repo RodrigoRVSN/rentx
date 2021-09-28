@@ -19,9 +19,19 @@ import {
   Content,
   Footer,
 } from "./styles";
+import { RootStackParamList } from "../../routes/stack.routes";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/core";
+
+type ScreenProp = StackNavigationProp<RootStackParamList, "Scheduling">;
 
 export function Scheduling() {
+  const navigation = useNavigation<ScreenProp>();
   const theme = useTheme();
+
+  function handleConfirmRental() {
+    navigation.navigate("SchedulingDetails");
+  }
 
   return (
     <Container>
@@ -61,7 +71,7 @@ export function Scheduling() {
         <Calendar />
       </Content>
       <Footer>
-        <Button title="Confirmar" />
+        <Button title="Confirmar" onPress={handleConfirmRental} />
       </Footer>
     </Container>
   );

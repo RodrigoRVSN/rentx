@@ -1,7 +1,7 @@
 import React from "react";
 import { StatusBar } from "react-native";
-import { BackButton } from "../../components/BackButton";
-import { ImageSlider } from "../../components/ImageSlider";
+import { useNavigation } from "@react-navigation/core";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import accelerationSvg from "../../assets/acceleration.svg";
 import energySvg from "../../assets/energy.svg";
@@ -26,10 +26,23 @@ import {
   Accessories,
   Footer,
 } from "./styles";
+
+import { BackButton } from "../../components/BackButton";
+import { ImageSlider } from "../../components/ImageSlider";
 import { Accessory } from "../../components/Accessory";
 import { Button } from "../../components/Button";
 
+import { RootStackParamList } from "../../routes/stack.routes";
+
+type ScreenProp = StackNavigationProp<RootStackParamList, "Home">;
+
 export function CarDetails() {
+  const navigation = useNavigation<ScreenProp>();
+
+  function handleConfirmRental() {
+    navigation.navigate("Scheduling");
+  }
+
   return (
     <Container>
       <StatusBar
@@ -78,7 +91,10 @@ export function CarDetails() {
       </Content>
 
       <Footer>
-        <Button title={"Escolher período de aluguel"} />
+        <Button
+          title={"Escolher período de aluguel"}
+          onPress={handleConfirmRental}
+        />
       </Footer>
     </Container>
   );

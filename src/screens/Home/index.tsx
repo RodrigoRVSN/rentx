@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { RFValue } from "react-native-responsive-fontsize";
@@ -9,22 +9,30 @@ import { Car } from "../../components/Car";
 import { Container, Header, TotalCars, HeaderContent, CarList } from "./styles";
 import { RootStackParamList } from "../../routes/stack.routes";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { CarDTO } from "../../dtos/CarDTO";
+import api from "../../services/api";
 
 type ScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
 export const Home = () => {
   const navigation = useNavigation<ScreenProp>();
+  const [carData, setCarData] = useState<CarDTO[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const carData = {
-    brand: "Audi",
-    name: "relampago",
-    rent: {
-      period: "AO DIA",
-      price: 1870,
-    },
-    thumbnail:
-      "https://img.elo7.com.br/feedback/attachments/DA522D/240x240/topper-fusquinha-preparativos-para-festa-de-1-aninho-do-meu-heitor-tag-papel-e-cia-1.jpg",
-  };
+  useEffect(() => {
+    async function loadCars() {
+      try {
+        const response = await api.get("/cars");
+        console.log(response);
+        setCarData(response.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadCars();
+  }, []);
 
   function handleCarDetails() {
     navigation.navigate("CarDetails");
@@ -44,10 +52,10 @@ export const Home = () => {
         </HeaderContent>
       </Header>
       <CarList
-        data={[1, 2, 3, 4, 5, 6, 7]}
-        keyExtractor={(item) => String(item)}
+        data={carData}
+        keyExtractor={(item) => item.id }
         renderItem={({ item }) => (
-          <Car data={carData} onPress={handleCarDetails} />
+          <Car data={item} onPress={handleCarDetails} />
         )}
       />
     </Container>

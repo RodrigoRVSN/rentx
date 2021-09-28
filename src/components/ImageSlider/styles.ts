@@ -6,7 +6,7 @@ interface ImageIndexProps {
 }
 
 export const Container = styled.View`
-  flex: 1;
+  width: 100%;
 `;
 
 export const ImageIndexes = styled.View`
@@ -21,8 +21,8 @@ export const ImageIndex = styled.View<ImageIndexProps>`
 
   background-color: ${({ theme, active }) =>
     active ? theme.colors.title : theme.colors.shape};
-    margin-left: 6px;
-    border-radius: 3px;
+  margin-left: 6px;
+  border-radius: 3px;
 `;
 
 export const CarImageWrapper = styled.View`

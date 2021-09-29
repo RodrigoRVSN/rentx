@@ -11,6 +11,7 @@ import { RootStackParamList } from "../../routes/stack.routes";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CarDTO } from "../../dtos/CarDTO";
 import api from "../../services/api";
+import { Load } from "../../components/Load";
 
 type ScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
@@ -33,8 +34,8 @@ export const Home = () => {
     loadCars();
   }, []);
 
-  function handleCarDetails() {
-    navigation.navigate("CarDetails");
+  function handleCarDetails(car: CarDTO) {
+    navigation.navigate<any>("CarDetails", { car });
   }
 
   return (
@@ -50,13 +51,17 @@ export const Home = () => {
           <TotalCars>Total de 12 carros</TotalCars>
         </HeaderContent>
       </Header>
-      <CarList
-        data={carData}
-        keyExtractor={(item) => item.id }
-        renderItem={({ item }) => (
-          <Car data={item} onPress={handleCarDetails} />
-        )}
-      />
+      {loading ? (
+        <Load />
+      ) : (
+        <CarList
+          data={carData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Car data={item} onPress={() => handleCarDetails(item)} />
+          )}
+        />
+      )}
     </Container>
   );
 };

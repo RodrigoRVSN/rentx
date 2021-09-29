@@ -1,6 +1,6 @@
 import React from "react";
 import { StatusBar } from "react-native";
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, useRoute } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import accelerationSvg from "../../assets/acceleration.svg";
@@ -33,11 +33,19 @@ import { Accessory } from "../../components/Accessory";
 import { Button } from "../../components/Button";
 
 import { RootStackParamList } from "../../routes/stack.routes";
+import { CarDTO } from "../../dtos/CarDTO";
+import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
 
 type ScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
+interface Params {
+  car: CarDTO;
+}
+
 export function CarDetails() {
   const navigation = useNavigation<ScreenProp>();
+  const route = useRoute();
+  const { car } = route.params as Params;
 
   function handleConfirmRental() {
     navigation.navigate("Scheduling");
@@ -57,36 +65,31 @@ export function CarDetails() {
       <CarImages>
         <ImageSlider
           imagesUrl={[
-            "https://img.elo7.com.br/feedback/attachments/DA522D/240x240/topper-fusquinha-preparativos-para-festa-de-1-aninho-do-meu-heitor-tag-papel-e-cia-1.jpg",
+            car.photos[0],
           ]}
         />
       </CarImages>
-
+      
       <Content>
         <Details>
           <Description>
-            <Brand>Lamborghini</Brand>
-            <Name>Huracan</Name>
+            <Brand>{car?.brand}</Brand>
+            <Name>{car?.name}</Name>
           </Description>
           <Rent>
-            <Frequency>Ao dia</Frequency>
-            <Amount>R$ 580</Amount>
+            <Frequency>{car?.rent.period}</Frequency>
+            <Amount>R$ {car?.rent.price}</Amount>
           </Rent>
         </Details>
 
         <Accessories>
-          <Accessory icon={speedSvg} name={"380km/h"} />
-          <Accessory icon={accelerationSvg} name={"380km/h"} />
-          <Accessory icon={energySvg} name={"380km/h"} />
-          <Accessory icon={accelerationSvg} name={"380km/h"} />
-          <Accessory icon={accelerationSvg} name={"380km/h"} />
-          <Accessory icon={accelerationSvg} name={"380km/h"} />
+          {car?.accessories.map(accessory => (
+            <Accessory key={accessory.type} icon={getAccessoryIcon(accessory.type)} name={accessory.name} />
+          ))}
         </Accessories>
 
         <About>
-          Este é automóvel desportivo. Surgiu do lendário touro de lide
-          indultado na praça Real Maestranza de Sevilla. É um belíssimo carro
-          para quem gosta de acelerar.
+          {car?.about}
         </About>
       </Content>
 

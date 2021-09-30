@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StatusBar } from "react-native";
+import { Alert, StatusBar } from "react-native";
 import { useTheme } from "styled-components";
 
 import { BackButton } from "../../components/BackButton";
@@ -26,9 +26,21 @@ import {
 } from "./styles";
 import { RootStackParamList } from "../../routes/stack.routes";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, useRoute } from "@react-navigation/core";
+import { format } from "date-fns";
+import { getPlatformDate } from "../../utils/getPlatformDate";
+import { CarDTO } from "../../dtos/CarDTO";
 
 type ScreenProp = StackNavigationProp<RootStackParamList, "Scheduling">;
+
+interface SelectedDates {
+  startDateFormatted: string;
+  endDateFormatted: string;
+}
+
+interface Params {
+  car: CarDTO;
+}
 
 export function Scheduling() {
   const [lastSelectedDate, setLastSelectedDate] = useState<DayProps>(
@@ -37,11 +49,24 @@ export function Scheduling() {
   const [markedDates, setMarkedDates] = useState<MarkedDatesProps>(
     {} as MarkedDatesProps
   );
+  const [selectedDates, setSelectedDates] = useState<SelectedDates>(
+    {} as SelectedDates
+  );
+
   const navigation = useNavigation<ScreenProp>();
   const theme = useTheme();
+  const route = useRoute();
+  const { car } = route.params as Params;
 
   function handleConfirmRental() {
-    navigation.navigate("SchedulingDetails");
+    if (!selectedDates.startDateFormatted && !selectedDates.endDateFormatted) {
+      Alert.alert("Preencha um intervalo de dias para prosseguir!");
+    } else {
+      navigation.navigate<any>("SchedulingDetails", {
+        car,
+        dates: Object.keys(markedDates),
+      });
+    }
   }
 
   function handleChangeDate(date: DayProps) {
@@ -55,6 +80,20 @@ export function Scheduling() {
     setLastSelectedDate(end);
     const interval = generateInterval(start, end);
     setMarkedDates(interval);
+
+    const firstDate = Object.keys(interval)[0];
+    const finalDate = Object.keys(interval)[Object.keys(interval).length - 1];
+
+    setSelectedDates({
+      startDateFormatted: format(
+        getPlatformDate(new Date(firstDate)),
+        "dd/MM/yyyy"
+      ),
+      endDateFormatted: format(
+        getPlatformDate(new Date(finalDate)),
+        "dd/MM/yyyy"
+      ),
+    });
   }
 
   return (
@@ -75,8 +114,8 @@ export function Scheduling() {
         <RentalInfo>
           <DateInfo>
             <DateTitle>DE</DateTitle>
-            <ValueInfo selected={false}>
-              <DateValue>18/06/2021</DateValue>
+            <ValueInfo selected={!!selectedDates.startDateFormatted}>
+              <DateValue>{selectedDates.startDateFormatted}</DateValue>
             </ValueInfo>
           </DateInfo>
 
@@ -84,8 +123,8 @@ export function Scheduling() {
 
           <DateInfo>
             <DateTitle>ATÉ</DateTitle>
-            <ValueInfo selected={false}>
-              <DateValue>18/06/2021</DateValue>
+            <ValueInfo selected={!!selectedDates.endDateFormatted}>
+              <DateValue>{selectedDates.endDateFormatted}</DateValue>
             </ValueInfo>
           </DateInfo>
         </RentalInfo>

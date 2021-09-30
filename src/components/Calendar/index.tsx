@@ -37,7 +37,7 @@ interface CalendarProps {
 
 function Calendar({ onDayPress, markedDates }: CalendarProps) {
   const theme = useTheme();
-console.log(markedDates)
+  
   return (
     <CustomCalendar
       renderArrow={(direction) => (

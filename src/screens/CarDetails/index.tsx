@@ -48,7 +48,7 @@ export function CarDetails() {
   const { car } = route.params as Params;
 
   function handleConfirmRental() {
-    navigation.navigate("Scheduling");
+    navigation.navigate<any>("Scheduling", { car });
   }
 
   return (
@@ -63,13 +63,9 @@ export function CarDetails() {
       </Header>
 
       <CarImages>
-        <ImageSlider
-          imagesUrl={[
-            car.photos[0],
-          ]}
-        />
+        <ImageSlider imagesUrl={[car.photos[0]]} />
       </CarImages>
-      
+
       <Content>
         <Details>
           <Description>
@@ -83,14 +79,16 @@ export function CarDetails() {
         </Details>
 
         <Accessories>
-          {car?.accessories.map(accessory => (
-            <Accessory key={accessory.type} icon={getAccessoryIcon(accessory.type)} name={accessory.name} />
+          {car?.accessories.map((accessory) => (
+            <Accessory
+              key={accessory.type}
+              icon={getAccessoryIcon(accessory.type)}
+              name={accessory.name}
+            />
           ))}
         </Accessories>
 
-        <About>
-          {car?.about}
-        </About>
+        <About>{car?.about}</About>
       </Content>
 
       <Footer>

@@ -7,7 +7,14 @@ import Logo from "../../assets/logo.svg";
 import { Car } from "../../components/Car";
 import { Load } from "../../components/Load";
 
-import { Container, Header, TotalCars, HeaderContent, CarList, ButtonMyCars } from "./styles";
+import {
+  Container,
+  Header,
+  TotalCars,
+  HeaderContent,
+  CarList,
+  ButtonMyCars,
+} from "./styles";
 import { RootStackParamList } from "../../routes/stack.routes";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CarDTO } from "../../dtos/CarDTO";
@@ -55,7 +62,10 @@ export const Home = () => {
       <Header>
         <HeaderContent>
           <Logo width={RFValue(108)} height={RFValue(12)} />
-          <TotalCars>Total de 12 carros</TotalCars>
+          <TotalCars>
+            Total de{" "}
+            {carData.length !== 1 ? `${carData.length} carros` : "1 carro"}{" "}
+          </TotalCars>
         </HeaderContent>
       </Header>
       {loading ? (
@@ -71,7 +81,11 @@ export const Home = () => {
       )}
 
       <ButtonMyCars onPress={handleOpenMyCars}>
-        <Ionicons name="car-sport-outline" size={24} color={theme.colors.background_secondary} />
+        <Ionicons
+          name="car-sport-outline"
+          size={24}
+          color={theme.colors.background_secondary}
+        />
       </ButtonMyCars>
     </Container>
   );

@@ -20,7 +20,7 @@ export function Button({
   ...rest
 }: Props) {
   const theme = useTheme();
-  loading = true;
+  
   return (
     <Container
       {...rest}

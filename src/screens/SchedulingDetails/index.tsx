@@ -41,7 +41,6 @@ import { useNavigation, useRoute } from "@react-navigation/core";
 import { CarDTO } from "../../dtos/CarDTO";
 import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
 
-import { MarkedDatesProps } from "../../components/Calendar";
 import { getPlatformDate } from "../../utils/getPlatformDate";
 import { format } from "date-fns";
 import api from "../../services/api";
@@ -62,6 +61,7 @@ export function SchedulingDetails() {
   const [rentalPeriod, setRentalPeriod] = useState<RentalPeriodProps>(
     {} as RentalPeriodProps
   );
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation<ScreenProp>();
   const theme = useTheme();
 
@@ -71,6 +71,7 @@ export function SchedulingDetails() {
   const totalRental = dates.length * car.rent.price;
 
   async function handleFinishRent() {
+    setLoading(true);
     const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
 
     const unavailable_dates = [
@@ -81,12 +82,23 @@ export function SchedulingDetails() {
     await api.post(`/schedules_byuser`, { car, user_id: 1 });
 
     api
-      .put(`/schedules_bycars/${car.id}`, { id: car.id, unavailable_dates })
+      .put(`/schedules_bycars/${car.id}`, {
+        id: car.id,
+        unavailable_dates,
+        startDate: format(getPlatformDate(new Date(dates[0])), "dd/MM/yyyy"),
+        endDate: format(
+          getPlatformDate(new Date(dates[dates.length - 1])),
+          "dd/MM/yyyy"
+        ),
+      })
       .then(() => {
         navigation.navigate("SchedulingComplete");
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 
@@ -177,6 +189,8 @@ export function SchedulingDetails() {
           title={"Alugar agora"}
           color={theme.colors.success}
           onPress={handleFinishRent}
+          enabled={!loading}
+          loading={loading}
         />
       </Footer>
     </Container>

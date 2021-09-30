@@ -23,7 +23,7 @@ export const Header = styled.View`
 export const Title = styled.Text`
   font-family: ${({ theme }) => theme.fonts.secondary_600};
   color: ${({ theme }) => theme.colors.shape};
-  font-size: ${RFValue(34)}px;
+  font-size: ${RFValue(30)}px;
   margin-top: 24px;
 `;
 

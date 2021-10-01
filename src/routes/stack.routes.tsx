@@ -7,7 +7,7 @@ import { Scheduling } from "../screens/Scheduling";
 import { SchedulingDetails } from "../screens/SchedulingDetails";
 import { SchedulingComplete } from "../screens/SchedulingComplete";
 import { MyCars } from "../screens/MyCars";
-import { Splash } from "../components/Splash";
+import { Splash } from "../screens/Splash";
 
 export type RootStackParamList = {
   Home: undefined;

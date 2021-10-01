@@ -1,7 +1,10 @@
+import { useNavigation } from "@react-navigation/core";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect } from "react";
 import Animated, {
   Extrapolate,
   interpolate,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -9,11 +12,15 @@ import Animated, {
 
 import BrandSvg from "../../assets/brand.svg";
 import LogoSvg from "../../assets/logo.svg";
+import { RootStackParamList } from "../../routes/stack.routes";
 
 import { Container } from "./styles";
 
+type ScreenProp = StackNavigationProp<RootStackParamList, "Home">;
+
 export function Splash() {
   const splashAnimation = useSharedValue(0);
+  const navigation = useNavigation<ScreenProp>();
 
   const brandStyle = useAnimatedStyle(() => {
     return {
@@ -47,8 +54,15 @@ export function Splash() {
     };
   });
 
+  function startApp() {
+    navigation.navigate("Home");
+  }
+
   useEffect(() => {
-    splashAnimation.value = withTiming(50, { duration: 1000 });
+    splashAnimation.value = withTiming(50, { duration: 1000 }, () => {
+      "worklet";
+      runOnJS(startApp)();
+    });
   }, []);
 
   return (

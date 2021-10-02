@@ -22,6 +22,7 @@ import {
   CarDate,
 } from "./styles";
 import { Car } from "../../components/Car";
+import { LoadAnimation } from "../../components/LoadAnimation";
 
 interface CarProps {
   id: string;
@@ -53,7 +54,7 @@ export const MyCars = () => {
   return (
     <>
       {loading ? (
-        <Load />
+        <LoadAnimation />
       ) : (
         <>
           <Container>
@@ -81,7 +82,7 @@ export const MyCars = () => {
               </Appointments>
               <FlatList
                 data={cars}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => String(item.id)}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => (
                   <CarWrapper>

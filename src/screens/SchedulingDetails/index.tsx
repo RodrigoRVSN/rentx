@@ -69,7 +69,7 @@ export function SchedulingDetails() {
   const route = useRoute();
   const { car, dates, countScheduled } = route.params as Params;
 
-  const totalRental = dates.length * car.rent.price;
+  const totalRental = (dates.length - countScheduled) * car.rent.price;
 
   async function handleFinishRent() {
     setLoading(true);

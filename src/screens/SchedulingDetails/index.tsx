@@ -50,6 +50,7 @@ type ScreenProp = StackNavigationProp<RootStackParamList, "Scheduling">;
 interface Params {
   car: CarDTO;
   dates: string[];
+  countScheduled: number;
 }
 
 interface RentalPeriodProps {
@@ -66,7 +67,7 @@ export function SchedulingDetails() {
   const theme = useTheme();
 
   const route = useRoute();
-  const { car, dates } = route.params as Params;
+  const { car, dates, countScheduled } = route.params as Params;
 
   const totalRental = dates.length * car.rent.price;
 
@@ -79,8 +80,15 @@ export function SchedulingDetails() {
       ...dates,
     ];
 
-    await api.post(`/schedules_byuser`, { car, user_id: 1 });
-
+    await api.post(`/schedules_byuser`, {
+      car,
+      user_id: 1,
+      startDate: format(getPlatformDate(new Date(dates[0])), "dd/MM/yyyy"),
+      endDate: format(
+        getPlatformDate(new Date(dates[dates.length - 1])),
+        "dd/MM/yyyy"
+      ),
+    });
     api
       .put(`/schedules_bycars/${car.id}`, {
         id: car.id,
@@ -168,17 +176,16 @@ export function SchedulingDetails() {
             size={RFValue(10)}
             color={theme.colors.text}
           />
-
+          
           <DateInfo>
             <DateTitle>ATÉ</DateTitle>
             <DateValue>{rentalPeriod.end}</DateValue>
           </DateInfo>
         </ScheduleInfo>
-
         <RentalInfo>
           <RentalDetails>
             <RentalTotal>TOTAL</RentalTotal>
-            <RentalDetailsSchedule>{`R$ ${car.rent.price} x${dates.length} diárias`}</RentalDetailsSchedule>
+            <RentalDetailsSchedule>{`R$ ${car.rent.price} x${dates.length - countScheduled} diárias`}</RentalDetailsSchedule>
           </RentalDetails>
           <RentalAmount>R$ {totalRental}</RentalAmount>
         </RentalInfo>

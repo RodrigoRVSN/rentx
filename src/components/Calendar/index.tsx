@@ -19,6 +19,7 @@ interface MarkedDatesProps {
     textColor: string;
     disabled?: boolean;
     disabledText?: boolean;
+    disableTouchEvent?: boolean;
   };
 }
 
@@ -33,11 +34,12 @@ interface DayProps {
 interface CalendarProps {
   onDayPress: DateCallbackHandler;
   markedDates: MarkedDatesProps;
+  scheduledDates: MarkedDatesProps;
 }
 
-function Calendar({ onDayPress, markedDates }: CalendarProps) {
+function Calendar({ onDayPress, markedDates, scheduledDates }: CalendarProps) {
   const theme = useTheme();
-  
+
   return (
     <CustomCalendar
       renderArrow={(direction) => (
@@ -68,10 +70,12 @@ function Calendar({ onDayPress, markedDates }: CalendarProps) {
       firstDay={1}
       minDate={new Date()}
       markingType="period"
-      markedDates={markedDates}
+      markedDates={{...markedDates, ...scheduledDates}}
       onDayPress={onDayPress}
+      disableMonthChange={true}
+
     />
-  );
-}
+    );
+  }
 
 export { Calendar, MarkedDatesProps, DayProps, generateInterval };

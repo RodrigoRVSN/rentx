@@ -23,14 +23,7 @@
 
 ---
 
-<div align="center"> 
-<video width="320" height="240" controls>
- <source src="/assets/demo.mp4" type="video/mp4">
- 
-</video>
-
-[![asciicast](https://asciinema.org/a/113463.png)](https://asciinema.org/a/113463)
-</div>
+https://user-images.githubusercontent.com/75763403/135737647-0c8ddf6e-2b1e-472b-ae2c-38b7ff5fd8f2.mp4
 
 ---
 

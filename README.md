@@ -21,9 +21,11 @@
 
 #### I made a scheduling system that blocks from scheduling on blocked days and subtracts from the selected days the scheduled ones.
 
+
+
 ---
 
-https://user-images.githubusercontent.com/75763403/135737647-0c8ddf6e-2b1e-472b-ae2c-38b7ff5fd8f2.mp4
+https://user-images.githubusercontent.com/75763403/135737770-20cdca02-bfca-46db-8d8d-fa8a5570ced4.mp4
 
 ---
 

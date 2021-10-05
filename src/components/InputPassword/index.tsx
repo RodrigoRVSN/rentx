@@ -41,6 +41,7 @@ export function InputPassword({ iconName, value, ...rest }: Props) {
 
       <InputContainer
         {...rest}
+        autoCapitalize="none"
         secureTextEntry={!isPasswordVisible}
         onBlur={inputOnBlur}
         onFocus={inputOnFocus}

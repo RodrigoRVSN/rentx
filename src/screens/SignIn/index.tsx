@@ -8,27 +8,23 @@ import { useTheme } from "styled-components";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import { InputPassword } from "../../components/InputPassword";
-<<<<<<< HEAD
+
 import { RootStackParamList } from "../../routes/stack.routes";
-=======
 
 import * as Yup from "yup";
-
->>>>>>> c8324fd2db91e4c7d24029092684fb5a75dedbe0
 import { Container, Header, Title, Subtitle, Footer, Form } from "./styles";
+import { useAuth } from "../../hooks/auth";
 
-type ScreenProp = StackNavigationProp<RootStackParamList, "SignUpFirstStep">;
+type ScreenProp = StackNavigationProp<RootStackParamList, "SignIn">;
 
 export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigation = useNavigation<ScreenProp>();
   const theme = useTheme();
+  const { signIn } = useAuth();
 
-<<<<<<< HEAD
-  function handleCreateAccount() {
-    navigation.navigate("SignUpFirstStep");
-=======
   async function handleSignIn() {
     try {
       const schema = Yup.object().shape({
@@ -40,6 +36,8 @@ export function SignIn() {
           .min(6, "A senha deve ter no mínimo 6 dígitos."),
       });
       await schema.validate({ email, password });
+      signIn({ email, password });
+      
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         Alert.alert("Eita", error.message);
@@ -47,7 +45,10 @@ export function SignIn() {
         Alert.alert("Opa", "Erro nas creddenciais.");
       }
     }
->>>>>>> c8324fd2db91e4c7d24029092684fb5a75dedbe0
+  }
+
+  function handleCreateAccount() {
+    navigation.navigate("SignUpFirstStep");
   }
 
   return (
@@ -97,9 +98,7 @@ export function SignIn() {
             />
             <Button
               title="Criar conta gratuita"
-              onPress={() => {
-                handleCreateAccount();
-              }}
+              onPress={handleCreateAccount}
               enabled={true}
               loading={false}
               color={theme.colors.shape}

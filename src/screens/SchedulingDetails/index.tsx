@@ -100,7 +100,12 @@ export function SchedulingDetails() {
         ),
       })
       .then(() => {
-        navigation.navigate("SchedulingComplete");
+        navigation.navigate<any>("Confirmation", {
+          title: "Carro alugado!",
+          description:
+            "Agora você só precisa ir\naté a concessionária da RENTX",
+          routeName: "Home",
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -176,7 +181,7 @@ export function SchedulingDetails() {
             size={RFValue(10)}
             color={theme.colors.text}
           />
-          
+
           <DateInfo>
             <DateTitle>ATÉ</DateTitle>
             <DateValue>{rentalPeriod.end}</DateValue>
@@ -185,7 +190,9 @@ export function SchedulingDetails() {
         <RentalInfo>
           <RentalDetails>
             <RentalTotal>TOTAL</RentalTotal>
-            <RentalDetailsSchedule>{`R$ ${car.rent.price} x${dates.length - countScheduled} diárias`}</RentalDetailsSchedule>
+            <RentalDetailsSchedule>{`R$ ${car.rent.price} x${
+              dates.length - countScheduled
+            } diárias`}</RentalDetailsSchedule>
           </RentalDetails>
           <RentalAmount>R$ {totalRental}</RentalAmount>
         </RentalInfo>

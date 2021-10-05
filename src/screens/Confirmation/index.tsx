@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, useRoute } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { StatusBar, useWindowDimensions } from "react-native";
@@ -10,14 +10,22 @@ import { RootStackParamList } from "../../routes/stack.routes";
 
 import { Container, Content, Title, Description, Footer } from "./styles";
 
+interface Params {
+  title: string;
+  description: string;
+  routeName: string;
+}
+
 type ScreenProp = StackNavigationProp<RootStackParamList, "Scheduling">;
 
-export function SchedulingComplete() {
+export function Confirmation() {
   const navigation = useNavigation<ScreenProp>();
   const { width } = useWindowDimensions();
+  const route = useRoute();
+  const { title, description, routeName } = route.params as Params;
 
   function handleOkConfirm() {
-    navigation.navigate("Home");
+    navigation.navigate<any>(routeName);
   }
 
   return (
@@ -30,12 +38,8 @@ export function SchedulingComplete() {
       <LogoSvg width={width} />
       <Content>
         <DoneSvg width={80} height={80} />
-        <Title>Carro alugado!</Title>
-        <Description>
-          Agora você só precisa ir {"\n"}
-          até a concessionária da RENTX {"\n"}
-          pegar o seu automóvel.
-        </Description>
+        <Title>{title}</Title>
+        <Description>{description}</Description>
       </Content>
       <Footer>
         <ConfirmButton title={"OK"} onPress={handleOkConfirm} />

@@ -6,7 +6,7 @@ import { StatusBar, useWindowDimensions } from "react-native";
 import DoneSvg from "../../assets/done.svg";
 import LogoSvg from "../../assets/logo_background_gray.svg";
 import { ConfirmButton } from "../../components/ConfirmButton";
-import { RootStackParamList } from "../../routes/stack.routes";
+import { RootStackAppParamList } from "../../routes/app.stack.routes";
 
 import { Container, Content, Title, Description, Footer } from "./styles";
 
@@ -16,7 +16,7 @@ interface Params {
   routeName: string;
 }
 
-type ScreenProp = StackNavigationProp<RootStackParamList, "Scheduling">;
+type ScreenProp = StackNavigationProp<RootStackAppParamList, "Scheduling">;
 
 export function Confirmation() {
   const navigation = useNavigation<ScreenProp>();

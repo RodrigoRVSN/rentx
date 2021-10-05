@@ -9,13 +9,12 @@ import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import { InputPassword } from "../../components/InputPassword";
 
-import { RootStackParamList } from "../../routes/stack.routes";
-
 import * as Yup from "yup";
 import { Container, Header, Title, Subtitle, Footer, Form } from "./styles";
 import { useAuth } from "../../hooks/auth";
+import { RootStackAuthParamList } from "../../routes/auth.routes";
 
-type ScreenProp = StackNavigationProp<RootStackParamList, "SignIn">;
+type ScreenProp = StackNavigationProp<RootStackAuthParamList, "SignIn">;
 
 export function SignIn() {
   const [email, setEmail] = useState("");
@@ -37,7 +36,6 @@ export function SignIn() {
       });
       await schema.validate({ email, password });
       signIn({ email, password });
-      
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         Alert.alert("Eita", error.message);

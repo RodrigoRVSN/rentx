@@ -22,7 +22,8 @@ import {
   Form,
 } from "./styles";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../../routes/stack.routes";
+import { RootStackAuthParamList } from "../../../routes/auth.routes";
+
 import api from "../../../services/api";
 
 interface Params {
@@ -33,7 +34,7 @@ interface Params {
   };
 }
 
-type ScreenProp = StackNavigationProp<RootStackParamList, "SignUpFirstStep">;
+type ScreenProp = StackNavigationProp<RootStackAuthParamList, "SignUpFirstStep">;
 
 export function SignUpSecondStep() {
   const [password, setPassword] = useState("");

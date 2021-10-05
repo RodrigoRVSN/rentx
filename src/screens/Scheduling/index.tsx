@@ -24,7 +24,6 @@ import {
   Content,
   Footer,
 } from "./styles";
-import { RootStackParamList } from "../../routes/stack.routes";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation, useRoute } from "@react-navigation/core";
 import { eachDayOfInterval, format } from "date-fns";
@@ -32,8 +31,9 @@ import { getPlatformDate } from "../../utils/getPlatformDate";
 import { CarDTO } from "../../dtos/CarDTO";
 import api from "../../services/api";
 import { LoadAnimation } from "../../components/LoadAnimation";
+import { RootStackAppParamList } from "../../routes/app.stack.routes";
 
-type ScreenProp = StackNavigationProp<RootStackParamList, "Scheduling">;
+type ScreenProp = StackNavigationProp<RootStackAppParamList, "Scheduling">;
 
 interface SelectedDates {
   startDateFormatted: string;

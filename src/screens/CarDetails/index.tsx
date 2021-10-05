@@ -24,7 +24,6 @@ import { ImageSlider } from "../../components/ImageSlider";
 import { Accessory } from "../../components/Accessory";
 import { Button } from "../../components/Button";
 
-import { RootStackParamList } from "../../routes/stack.routes";
 import { CarDTO } from "../../dtos/CarDTO";
 import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
 import Animated, {
@@ -36,8 +35,9 @@ import Animated, {
 } from "react-native-reanimated";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
 import { useTheme } from "styled-components";
+import { RootTabAppParamList } from "../../routes/app.tab.routes";
 
-type ScreenProp = StackNavigationProp<RootStackParamList, "Home">;
+type ScreenProp = StackNavigationProp<RootTabAppParamList, "Home">;
 
 interface Params {
   car: CarDTO;
@@ -110,16 +110,6 @@ export function CarDetails() {
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
       >
-        <Details>
-          <Description>
-            <Brand>{car?.brand}</Brand>
-            <Name>{car?.name}</Name>
-          </Description>
-          <Rent>
-            <Frequency>{car?.rent.period}</Frequency>
-            <Amount>R$ {car?.rent.price}</Amount>
-          </Rent>
-        </Details>
 
         <Accessories>
           {car?.accessories.map((accessory) => (

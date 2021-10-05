@@ -12,11 +12,11 @@ import Animated, {
 
 import BrandSvg from "../../assets/brand.svg";
 import LogoSvg from "../../assets/logo.svg";
-import { RootStackParamList } from "../../routes/stack.routes";
+import { RootStackAuthParamList } from "../../routes/auth.routes";
 
 import { Container } from "./styles";
 
-type ScreenProp = StackNavigationProp<RootStackParamList, "Home">;
+type ScreenProp = StackNavigationProp<RootStackAuthParamList, "SignIn">;
 
 export function Splash() {
   const splashAnimation = useSharedValue(0);
@@ -55,7 +55,7 @@ export function Splash() {
   });
 
   function startApp() {
-    navigation.navigate("Home");
+    navigation.navigate("SignIn");
   }
 
   useEffect(() => {

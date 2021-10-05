@@ -11,7 +11,7 @@ import { BackButton } from "../../../components/BackButton";
 import { Bullet } from "../../../components/Bullet";
 import { Button } from "../../../components/Button";
 import { Input } from "../../../components/Input";
-import { RootStackParamList } from "../../../routes/stack.routes";
+import { RootStackAuthParamList } from "../../../routes/auth.routes";
 
 import * as Yup from "yup";
 
@@ -25,7 +25,7 @@ import {
   Form,
 } from "./styles";
 
-type ScreenProp = StackNavigationProp<RootStackParamList, "SignUpFirstStep">;
+type ScreenProp = StackNavigationProp<RootStackAuthParamList, "SignUpFirstStep">;
 
 export function SignUpFirstStep() {
   const [name, setName] = useState("");

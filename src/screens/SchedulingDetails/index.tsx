@@ -36,7 +36,6 @@ import {
 } from "./styles";
 import { RFValue } from "react-native-responsive-fontsize";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../routes/stack.routes";
 import { useNavigation, useRoute } from "@react-navigation/core";
 import { CarDTO } from "../../dtos/CarDTO";
 import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
@@ -44,8 +43,9 @@ import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
 import { getPlatformDate } from "../../utils/getPlatformDate";
 import { format } from "date-fns";
 import api from "../../services/api";
+import { RootStackAppParamList } from "../../routes/app.stack.routes";
 
-type ScreenProp = StackNavigationProp<RootStackParamList, "Scheduling">;
+type ScreenProp = StackNavigationProp<RootStackAppParamList, "Scheduling">;
 
 interface Params {
   car: CarDTO;
@@ -69,7 +69,7 @@ export function SchedulingDetails() {
   const route = useRoute();
   const { car, dates, countScheduled } = route.params as Params;
 
-  const totalRental = (dates.length - countScheduled) * car.rent.price;
+  const totalRental = (dates.length - countScheduled) * car.price;
 
   async function handleFinishRent() {
     setLoading(true);
@@ -148,7 +148,7 @@ export function SchedulingDetails() {
           </Description>
           <Rent>
             <Frequency>Ao dia</Frequency>
-            <Amount>R$ {car.rent.price}</Amount>
+            <Amount>R$ {car.price}</Amount>
           </Rent>
         </Details>
 
@@ -190,7 +190,7 @@ export function SchedulingDetails() {
         <RentalInfo>
           <RentalDetails>
             <RentalTotal>TOTAL</RentalTotal>
-            <RentalDetailsSchedule>{`R$ ${car.rent.price} x${
+            <RentalDetailsSchedule>{`R$ ${car.price} x${
               dates.length - countScheduled
             } diárias`}</RentalDetailsSchedule>
           </RentalDetails>

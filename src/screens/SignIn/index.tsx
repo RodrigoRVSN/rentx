@@ -13,7 +13,6 @@ import * as Yup from "yup";
 import { Container, Header, Title, Subtitle, Footer, Form } from "./styles";
 import { useAuth } from "../../hooks/auth";
 import { RootStackAuthParamList } from "../../routes/auth.routes";
-import { database } from "../../database";
 
 type ScreenProp = StackNavigationProp<RootStackAuthParamList, "SignIn">;
 
@@ -49,15 +48,6 @@ export function SignIn() {
   function handleCreateAccount() {
     navigation.navigate("SignUpFirstStep");
   }
-
-  useEffect(() => {
-    async function loadData() {
-      const userCollection = database.get("users");
-      const users = await userCollection.query().fetch();
-      console.log(users);
-    }
-    loadData();
-  }, []);
 
   return (
     <KeyboardAvoidingView behavior="position" enabled>

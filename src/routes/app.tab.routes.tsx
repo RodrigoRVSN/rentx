@@ -8,7 +8,7 @@ import { MyCars } from "../screens/MyCars";
 import { AppStackRoutes } from "./app.stack.routes";
 
 export type RootTabAppParamList = {
-  Home: undefined;
+  First: undefined;
   Profile: undefined;
   MyCars: undefined;
 };
@@ -20,6 +20,7 @@ import CarSvg from "../assets/car.svg";
 import PeopleSvg from "../assets/people.svg";
 import { useTheme } from "styled-components";
 import { Platform } from "react-native";
+import { Profile } from "../screens/Profile";
 
 export function AppTabRoutes() {
   const theme = useTheme();
@@ -33,13 +34,13 @@ export function AppTabRoutes() {
         tabBarActiveTintColor: theme.colors.main,
         tabBarStyle: {
           paddingVertical: Platform.OS === "ios" ? 20 : 0,
-          height: 78,
+          height: 60,
           backgroundColor: theme.colors.background_secondary,
         },
       }}
     >
       <Screen
-        name="Home"
+        name="First"
         component={AppStackRoutes}
         options={{
           tabBarIcon: ({ color }) => (
@@ -58,7 +59,7 @@ export function AppTabRoutes() {
       />
       <Screen
         name="Profile"
-        component={Home}
+        component={Profile}
         options={{
           tabBarIcon: ({ color }) => (
             <PeopleSvg width={24} height={24} fill={color} />

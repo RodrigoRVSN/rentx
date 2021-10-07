@@ -12,6 +12,7 @@ import { CarDTO } from "../../dtos/CarDTO";
 import api from "../../services/api";
 import { LoadAnimation } from "../../components/LoadAnimation";
 import { RootStackAppParamList } from "../../routes/app.stack.routes";
+import { useNetInfo } from "@react-native-community/netinfo";
 
 type ScreenProp = StackNavigationProp<RootStackAppParamList, "Home">;
 
@@ -20,23 +21,43 @@ export const Home = () => {
   const [carData, setCarData] = useState<CarDTO[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const netInfo = useNetInfo();
+
   function handleCarDetails(car: CarDTO) {
     navigation.navigate<any>("CarDetails", { car });
   }
 
   useEffect(() => {
+    let isMounted = true;
+
     async function loadCars() {
       try {
         const response = await api.get("/cars");
-        setCarData(response.data);
+        if (isMounted) {
+          setCarData(response.data);
+        }
       } catch (error) {
         console.log(error);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
     loadCars();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
+
+  useEffect(() => {
+    if (netInfo.isConnected) {
+      console.log("oi online");
+    } else {
+      console.log("Some off");
+    }
+  }, [netInfo.isConnected]);
 
   return (
     <Container>

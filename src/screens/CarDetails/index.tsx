@@ -35,9 +35,9 @@ import Animated, {
 } from "react-native-reanimated";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
 import { useTheme } from "styled-components";
-import { RootTabAppParamList } from "../../routes/app.tab.routes";
+import { RootStackAppParamList } from "../../routes/app.stack.routes";
 
-type ScreenProp = StackNavigationProp<RootTabAppParamList, "Home">;
+type ScreenProp = StackNavigationProp<RootStackAppParamList, "Home">;
 
 interface Params {
   car: CarDTO;

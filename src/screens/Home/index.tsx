@@ -2,29 +2,55 @@ import React, { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { RFValue } from "react-native-responsive-fontsize";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import Logo from "../../assets/logo.svg";
 import { Car } from "../../components/Car";
-
-import { Container, Header, TotalCars, HeaderContent, CarList } from "./styles";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { CarDTO } from "../../dtos/CarDTO";
-import api from "../../services/api";
 import { LoadAnimation } from "../../components/LoadAnimation";
+
+import { CarDTO } from "../../dtos/CarDTO";
 import { RootStackAppParamList } from "../../routes/app.stack.routes";
 import { useNetInfo } from "@react-native-community/netinfo";
+
+import api from "../../services/api";
+import { synchronize } from "@nozbe/watermelondb/sync";
+import { database } from "../../database";
+import { Car as ModelCar } from "../../database/model/Car";
+
+import { Container, Header, TotalCars, HeaderContent, CarList } from "./styles";
 
 type ScreenProp = StackNavigationProp<RootStackAppParamList, "Home">;
 
 export const Home = () => {
-  const navigation = useNavigation<ScreenProp>();
-  const [carData, setCarData] = useState<CarDTO[]>([]);
+  const [carData, setCarData] = useState<ModelCar[]>([]);
   const [loading, setLoading] = useState(true);
-
+  
+  const navigation = useNavigation<ScreenProp>();
   const netInfo = useNetInfo();
 
   function handleCarDetails(car: CarDTO) {
     navigation.navigate<any>("CarDetails", { car });
+  }
+
+  
+  async function offlineSynchronize(){
+    await synchronize({
+      database,
+      pullChanges: async ({ lastPulledAt }) => {
+        const response = await api
+        .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
+        
+        const { changes, latestVersion } = response.data;
+
+        console.log('######### changes #######');
+        console.log(changes);
+        return { changes, timestamp: latestVersion }
+      },
+      pushChanges: async ({ changes }) => {
+        const user = changes.users;
+        await api.post('/users/sync', user);
+      },
+    });
   }
 
   useEffect(() => {
@@ -32,9 +58,11 @@ export const Home = () => {
 
     async function loadCars() {
       try {
-        const response = await api.get("/cars");
+        const carCollection = database.get<ModelCar>("cars");
+        const cars = await carCollection.query().fetch();
+
         if (isMounted) {
-          setCarData(response.data);
+          setCarData(cars);
         }
       } catch (error) {
         console.log(error);
@@ -50,14 +78,12 @@ export const Home = () => {
       isMounted = false;
     };
   }, []);
-
+  
   useEffect(() => {
     if (netInfo.isConnected) {
-      console.log("oi online");
-    } else {
-      console.log("Some off");
+      offlineSynchronize();
     }
-  }, [netInfo.isConnected]);
+  }, [netInfo.isConnected]); 
 
   return (
     <Container>

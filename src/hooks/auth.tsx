@@ -29,6 +29,7 @@ interface AuthContextData {
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => Promise<void>;
   updatedUser: (user: User) => Promise<void>;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -39,12 +40,14 @@ interface AuthProviderProps {
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [data, setData] = useState<User>({} as User);
+  const [loading, setLoading] = useState(true);
 
   async function signIn({ email, password }: SignInCredentials) {
     const response = await api.post("/sessions", { email, password });
 
-    const { token, user } = response.data;
-    api.defaults.headers.authorizations = `Bearer ${token}`;
+    const { token, user } = response.data; 
+    api.defaults.headers.authorization = `Bearer ${token}`;
+       
 
     const userCollection = database.get<ModelUser>("users");
     await database.write(async () => {
@@ -97,18 +100,21 @@ function AuthProvider({ children }: AuthProviderProps) {
     async function loadUserData() {
       const userCollection = database.get<ModelUser>("users");
       const response = await userCollection.query().fetch();
-      console.log(response)
       if (response.length > 0) {
         const userData = response[0]._raw as unknown as User;
-        api.defaults.headers.authorizations = `Bearer ${userData.token}`;
+        api.defaults.headers.authorization = `Bearer ${userData.token}`;
+        console.log(userData.token)
         setData(userData);
       }
+      setLoading(false);
     }
     loadUserData();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user: data, signIn, signOut,updatedUser }}>
+    <AuthContext.Provider
+      value={{ user: data, signIn, signOut, updatedUser, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );

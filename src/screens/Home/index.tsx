@@ -31,19 +31,16 @@ export const Home = () => {
   function handleCarDetails(car: CarDTO) {
     navigation.navigate<any>("CarDetails", { car });
   }
-
   
   async function offlineSynchronize(){
     await synchronize({
       database,
       pullChanges: async ({ lastPulledAt }) => {
+        
         const response = await api
         .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
         
         const { changes, latestVersion } = response.data;
-
-        console.log('######### changes #######');
-        console.log(changes);
         return { changes, timestamp: latestVersion }
       },
       pushChanges: async ({ changes }) => {
@@ -80,7 +77,7 @@ export const Home = () => {
   }, []);
   
   useEffect(() => {
-    if (netInfo.isConnected) {
+    if (netInfo.isConnected === true) {
       offlineSynchronize();
     }
   }, [netInfo.isConnected]); 

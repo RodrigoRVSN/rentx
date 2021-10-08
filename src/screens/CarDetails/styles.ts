@@ -41,6 +41,8 @@ export const Name = styled.Text`
   color: ${({ theme }) => theme.colors.title};
   font-family: ${({ theme }) => theme.fonts.secondary_500};
   font-size: ${RFValue(25)}px;
+  
+  max-width: ${RFValue(180)}px;
 `;
 
 export const Rent = styled.View``;
@@ -81,4 +83,9 @@ export const Footer = styled.View`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.background_secondary};
   padding: 24px 24px ${getStatusBarHeight()}px;
+`;
+
+export const OfflineInfo = styled.Text`
+  color: ${({ theme }) => theme.colors.main};
+  text-align: center;
 `;

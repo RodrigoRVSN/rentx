@@ -25,10 +25,12 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  StatusBar,
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import * as ImagePicker from "expo-image-picker";
 import * as Yup from "yup";
+import { useNetInfo } from "@react-native-community/netinfo";
 
 export function Profile() {
   const { user, signOut, updatedUser } = useAuth();
@@ -39,11 +41,16 @@ export function Profile() {
     "dataProfile"
   );
   const theme = useTheme();
+  const netInfo = useNetInfo();
 
   function handleChangeOption(
     optionSelected: "dataProfile" | "changePassword"
   ) {
-    setOption(optionSelected);
+    if (netInfo.isConnected === false && optionSelected === "changePassword") {
+      Alert.alert("Offline amigão", "Toma vergonha e liga a net aí filhão");
+    } else {
+      setOption(optionSelected);
+    }
   }
 
   async function handleAvatarSelect() {
@@ -74,13 +81,13 @@ export function Profile() {
       await schema.validate(data);
 
       await updatedUser({
+        id: user.id,
+        user_id: user.user_id,
+        email: user.email,
         name,
         driver_license: driverLicense,
-        avatar: avatar,
-        email: user.email,
-        id: user.id,
-        token: user.token,
-        user_id: user.user_id,
+        avatar,
+        token: user.token
       });
 
       Alert.alert("Feito!");
@@ -107,6 +114,11 @@ export function Profile() {
     <KeyboardAvoidingView behavior="position" enabled>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
+          <StatusBar
+            barStyle="light-content"
+            translucent
+            backgroundColor="transparent"
+          />
           <Header>
             <HeaderContent>
               <BackButton />
@@ -119,7 +131,6 @@ export function Profile() {
                 />
               </SignOutButton>
             </HeaderContent>
-
             <PhotoContainer>
               {!!avatar && <Photo source={{ uri: avatar }} />}
               <PictureButton onPress={handleAvatarSelect}>

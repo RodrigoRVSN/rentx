@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { CarDTO } from "../../dtos/CarDTO";
 import api from "../../services/api";
-import { Load } from "../../components/Load";
 import { FlatList, StatusBar } from "react-native";
 import { BackButton } from "../../components/BackButton";
 import { useTheme } from "styled-components";
@@ -23,25 +22,35 @@ import {
 } from "./styles";
 import { Car } from "../../components/Car";
 import { LoadAnimation } from "../../components/LoadAnimation";
+import { Car as ModelCar } from "../../database/model/Car";
+import { format, parseISO } from "date-fns";
+import { useIsFocused } from "@react-navigation/core";
 
-interface CarProps {
+interface DataProps {
   id: string;
-  user_id: string;
-  car: CarDTO;
-  startDate: string;
-  endDate: string;
+  car: ModelCar;
+  start_date: string;
+  end_date: string;
 }
 
 export const MyCars = () => {
-  const [cars, setCars] = useState<CarProps[]>([]);
+  const [cars, setCars] = useState<DataProps[]>([]);
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("/schedules_byuser?user_id=1");
-        setCars(response.data);
+        const response = await api.get("/rentals");
+        const dataFormatted = response.data.map((data: DataProps) => {
+          return {
+            car: data.car,
+            start_date: format(parseISO(data.start_date), "dd/MM/yyyy"),
+            end_date: format(parseISO(data.end_date), "dd/MM/yyyy"),
+          };
+        });
+        setCars(dataFormatted);
       } catch (error) {
         console.log(error);
       } finally {
@@ -49,7 +58,7 @@ export const MyCars = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [isFocused]);
 
   return (
     <>
@@ -64,10 +73,7 @@ export const MyCars = () => {
                 backgroundColor="transparent"
                 barStyle="light-content"
               />
-              <BackButton
-                onPress={() => {}}
-                color={theme.colors.background_secondary}
-              />
+              <BackButton color={theme.colors.background_secondary} />
               <Title>
                 Seus agendamentos, {"\n"}
                 estão aqui.
@@ -82,7 +88,7 @@ export const MyCars = () => {
               </Appointments>
               <FlatList
                 data={cars}
-                keyExtractor={(item) => String(item.startDate)}
+                keyExtractor={(item) => String(item.id)}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => (
                   <CarWrapper>
@@ -90,14 +96,14 @@ export const MyCars = () => {
                     <CarFooter>
                       <CarFooterTitle>PERÍODO</CarFooterTitle>
                       <CarDateWrapper>
-                        <CarDate>{item.startDate}</CarDate>
+                        <CarDate>{item.start_date}</CarDate>
                         <AntDesign
                           name="arrowright"
                           size={20}
                           color={theme.colors.title}
                           style={{ marginHorizontal: 10 }}
                         />
-                        <CarDate>{item.endDate}</CarDate>
+                        <CarDate>{item.end_date}</CarDate>
                       </CarDateWrapper>
                     </CarFooter>
                   </CarWrapper>

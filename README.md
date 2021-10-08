@@ -1,7 +1,7 @@
 # 💻 Project
 
 ## rentX app - With this app, you can rent cars and see details.
-### This project was made in Ignite to train UX/UI (Nielsen heuristics), Animations (threads) and API 
+### This project was made in Ignite to train UX/UI (Nielsen heuristics), Animations (threads), API and offline first. 
 
 ---
 
@@ -14,6 +14,10 @@
 - Json server
 - React Reanimated
 - Looties
+- Yup
+- Auth Routes
+- Watermelon DB (offline first)
+- Optimistic interface
 
 ---
 
